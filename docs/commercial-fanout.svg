@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <!-- Title -->
+  <text x="400" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1f3a5f">Commercial Branch: One Expensive Query → Three Outputs</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#6b7280">A single Oracle round-trip is sliced in-memory using pandasql instead of re-querying the database</text>
+
+  <!-- Step 1: DB -->
+  <g transform="translate(310, 90)">
+    <rect width="180" height="60" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+    <text x="90" y="28" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">db_commercial</text>
+    <text x="90" y="46" text-anchor="middle" font-size="11" fill="#374151">(Oracle, via SQLAlchemy)</text>
+  </g>
+
+  <!-- Arrow 1: Network query -->
+  <line x1="400" y1="155" x2="400" y2="195" stroke="#1f3a5f" stroke-width="2"/>
+  <polygon points="394,193 400,205 406,193" fill="#1f3a5f"/>
+  <text x="408" y="180" font-size="11" fill="#1f3a5f" font-style="italic">run_query() — expensive network round-trip</text>
+
+  <!-- Step 2: DataFrame in memory -->
+  <g transform="translate(280, 210)">
+    <rect width="240" height="80" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="120" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#1f3a5f">df (in-memory DataFrame)</text>
+    <text x="120" y="52" text-anchor="middle" font-size="11" fill="#374151">all commercial claim rows returned</text>
+    <text x="120" y="68" text-anchor="middle" font-size="10" fill="#6b7280" font-style="italic">— amounts cleaned, dtypes coerced —</text>
+  </g>
+
+  <!-- Arrow 2: Hand off to pandasql -->
+  <line x1="400" y1="295" x2="400" y2="320" stroke="#1f3a5f" stroke-width="2"/>
+  <polygon points="394,318 400,330 406,318" fill="#1f3a5f"/>
+
+  <!-- Step 3: PandaSQL -->
+  <g transform="translate(280, 335)">
+    <rect width="240" height="60" rx="10" fill="#f3e8ff" stroke="#a78bfa" stroke-width="2"/>
+    <text x="120" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#5b21b6">PandaSQL (ps = PandaSQL())</text>
+    <text x="120" y="48" text-anchor="middle" font-size="11" fill="#374151">in-memory SQL engine over the df</text>
+  </g>
+
+  <!-- Three branches -->
+  <!-- branch left -->
+  <line x1="340" y1="395" x2="155" y2="430" stroke="#1f3a5f" stroke-width="2"/>
+  <polygon points="159,425 145,432 161,436" fill="#1f3a5f"/>
+  <!-- branch middle -->
+  <line x1="400" y1="395" x2="400" y2="430" stroke="#1f3a5f" stroke-width="2"/>
+  <polygon points="394,428 400,440 406,428" fill="#1f3a5f"/>
+  <!-- branch right -->
+  <line x1="460" y1="395" x2="645" y2="430" stroke="#1f3a5f" stroke-width="2"/>
+  <polygon points="641,425 655,432 639,436" fill="#1f3a5f"/>
+
+  <!-- Three output boxes -->
+  <g transform="translate(40, 445)">
+    <rect width="230" height="80" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+    <text x="115" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">ps(qry_hd)</text>
+    <text x="115" y="42" text-anchor="middle" font-size="11" fill="#374151">comm_hd → Excel</text>
+    <text x="115" y="62" text-anchor="middle" font-size="10" fill="#065f46" font-weight="600">claims_commercial_hd_*.xlsx</text>
+  </g>
+
+  <g transform="translate(285, 445)">
+    <rect width="230" height="80" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+    <text x="115" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">ps(qry_pob)</text>
+    <text x="115" y="42" text-anchor="middle" font-size="11" fill="#374151">comm_pob → Excel</text>
+    <text x="115" y="62" text-anchor="middle" font-size="10" fill="#065f46" font-weight="600">claims_commercial_pob_*.xlsx</text>
+  </g>
+
+  <g transform="translate(530, 445)">
+    <rect width="230" height="80" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+    <text x="115" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">ps(qry_prepay)</text>
+    <text x="115" y="42" text-anchor="middle" font-size="11" fill="#374151">comm_prepay → Excel</text>
+    <text x="115" y="62" text-anchor="middle" font-size="10" fill="#065f46" font-weight="600">claims_commercial_prepay_*.xlsx</text>
+  </g>
+
+  <!-- Side annotation -->
+  <g transform="translate(560, 100)">
+    <rect width="220" height="100" rx="8" fill="#f9fafb" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4 3"/>
+    <text x="12" y="22" font-size="12" font-weight="700" fill="#1f3a5f">Why this matters</text>
+    <text x="12" y="42" font-size="11" fill="#374151">A naive design would issue</text>
+    <text x="12" y="56" font-size="11" fill="#374151">3 separate Oracle queries —</text>
+    <text x="12" y="70" font-size="11" fill="#374151">3× the network cost, 3× the</text>
+    <text x="12" y="84" font-size="11" fill="#374151">DB load. Here the round-trip</text>
+    <text x="12" y="98" font-size="11" fill="#374151">happens once.</text>
+  </g>
+</svg>

@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+  <!-- Title -->
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1f3a5f">Query-to-Database Mapping</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">21 (database, query) pairs · one query can target many DBs · one DB can host many queries</text>
+
+  <!-- Matrix area: top-left at (180, 100), cells 55 wide x 38 tall -->
+  <!-- Column headers (databases) -->
+  <g font-size="10" fill="#1f3a5f" font-weight="600">
+    <text x="207" y="92" text-anchor="middle">db_</text><text x="207" y="103" text-anchor="middle">region_1</text>
+    <text x="262" y="92" text-anchor="middle">db_</text><text x="262" y="103" text-anchor="middle">region_2</text>
+    <text x="317" y="92" text-anchor="middle">db_</text><text x="317" y="103" text-anchor="middle">region_3</text>
+    <text x="372" y="92" text-anchor="middle">db_</text><text x="372" y="103" text-anchor="middle">region_4</text>
+    <text x="427" y="92" text-anchor="middle">db_</text><text x="427" y="103" text-anchor="middle">region_5</text>
+    <text x="482" y="92" text-anchor="middle">db_</text><text x="482" y="103" text-anchor="middle">region_6</text>
+    <text x="537" y="92" text-anchor="middle">db_</text><text x="537" y="103" text-anchor="middle">region_7</text>
+    <text x="592" y="92" text-anchor="middle">db_</text><text x="592" y="103" text-anchor="middle">region_8</text>
+    <text x="647" y="92" text-anchor="middle">db_</text><text x="647" y="103" text-anchor="middle">medicare</text>
+    <text x="702" y="92" text-anchor="middle">db_</text><text x="702" y="103" text-anchor="middle">marketplace</text>
+    <text x="757" y="92" text-anchor="middle">db_</text><text x="757" y="103" text-anchor="middle">commercial</text>
+  </g>
+
+  <!-- Highlight reused DB columns -->
+  <rect x="565" y="112" width="55" height="266" fill="#fef3c7" opacity="0.5"/>
+  <rect x="675" y="112" width="55" height="266" fill="#fef3c7" opacity="0.5"/>
+
+  <!-- Grid lines -->
+  <g stroke="#e5e7eb" stroke-width="1">
+    <!-- horizontal -->
+    <line x1="180" y1="112" x2="785" y2="112"/>
+    <line x1="180" y1="150" x2="785" y2="150"/>
+    <line x1="180" y1="188" x2="785" y2="188"/>
+    <line x1="180" y1="226" x2="785" y2="226"/>
+    <line x1="180" y1="264" x2="785" y2="264"/>
+    <line x1="180" y1="302" x2="785" y2="302"/>
+    <line x1="180" y1="340" x2="785" y2="340"/>
+    <line x1="180" y1="378" x2="785" y2="378"/>
+    <!-- vertical -->
+    <line x1="180" y1="112" x2="180" y2="378"/>
+    <line x1="235" y1="112" x2="235" y2="378"/>
+    <line x1="290" y1="112" x2="290" y2="378"/>
+    <line x1="345" y1="112" x2="345" y2="378"/>
+    <line x1="400" y1="112" x2="400" y2="378"/>
+    <line x1="455" y1="112" x2="455" y2="378"/>
+    <line x1="510" y1="112" x2="510" y2="378"/>
+    <line x1="565" y1="112" x2="565" y2="378"/>
+    <line x1="620" y1="112" x2="620" y2="378"/>
+    <line x1="675" y1="112" x2="675" y2="378"/>
+    <line x1="730" y1="112" x2="730" y2="378"/>
+    <line x1="785" y1="112" x2="785" y2="378"/>
+  </g>
+
+  <!-- Row labels (queries) -->
+  <g font-size="11" fill="#1f3a5f" font-weight="600" text-anchor="end">
+    <text x="172" y="135">qry_medicaid_t5</text>
+    <text x="172" y="173">qry_medicaid_t4</text>
+    <text x="172" y="211">qry_medicare_t5</text>
+    <text x="172" y="249">qry_marketplace_t5</text>
+    <text x="172" y="287">qry_commercial</text>
+    <text x="172" y="325">qry_state_prepay</text>
+    <text x="172" y="363">qry_all_marketplace_pob</text>
+  </g>
+
+  <!-- Cells: parallel batches (blue) -->
+  <!-- Row 1: qry_medicaid_t5 against R1..R8 (blue, parallel) -->
+  <g fill="#3b82f6">
+    <circle cx="207" cy="131" r="8"/>
+    <circle cx="262" cy="131" r="8"/>
+    <circle cx="317" cy="131" r="8"/>
+    <circle cx="372" cy="131" r="8"/>
+    <circle cx="427" cy="131" r="8"/>
+    <circle cx="482" cy="131" r="8"/>
+    <circle cx="537" cy="131" r="8"/>
+    <circle cx="592" cy="131" r="8"/>
+  </g>
+  <!-- bracket annotation -->
+  <text x="612" y="135" font-size="10" fill="#3b82f6" font-weight="600">↤ Batch 1 (parallel)</text>
+
+  <!-- Row 2: qry_medicaid_t4 against R1..R8 -->
+  <g fill="#3b82f6">
+    <circle cx="207" cy="169" r="8"/>
+    <circle cx="262" cy="169" r="8"/>
+    <circle cx="317" cy="169" r="8"/>
+    <circle cx="372" cy="169" r="8"/>
+    <circle cx="427" cy="169" r="8"/>
+    <circle cx="482" cy="169" r="8"/>
+    <circle cx="537" cy="169" r="8"/>
+    <circle cx="592" cy="169" r="8"/>
+  </g>
+  <text x="612" y="173" font-size="10" fill="#3b82f6" font-weight="600">↤ Batch 2 (parallel)</text>
+
+  <!-- Row 3: qry_medicare_t5 -->
+  <circle cx="647" cy="207" r="8" fill="#a78bfa"/>
+  <text x="667" y="211" font-size="10" fill="#a78bfa" font-weight="600">↤ Batch 3 (serial)</text>
+
+  <!-- Row 4: qry_marketplace_t5 -->
+  <circle cx="702" cy="245" r="8" fill="#a78bfa"/>
+  <text x="722" y="249" font-size="10" fill="#a78bfa" font-weight="600">↤ Batch 4 (serial)</text>
+
+  <!-- Row 5: qry_commercial -->
+  <circle cx="757" cy="283" r="9" fill="#f59e0b" stroke="#92400e" stroke-width="1"/>
+  <text x="757" y="287" text-anchor="middle" font-size="11" fill="white" font-weight="700">★</text>
+  <text x="555" y="287" font-size="10" fill="#f59e0b" font-weight="600">Batch 5 (serial · special) →</text>
+
+  <!-- Row 6: qry_state_prepay against R8 -->
+  <circle cx="592" cy="321" r="8" fill="#a78bfa"/>
+  <text x="612" y="325" font-size="10" fill="#a78bfa" font-weight="600">↤ Batch 6 (serial)</text>
+
+  <!-- Row 7: qry_all_marketplace_pob against MKT -->
+  <circle cx="702" cy="359" r="8" fill="#a78bfa"/>
+  <text x="722" y="363" font-size="10" fill="#a78bfa" font-weight="600">↤ Batch 7 (serial)</text>
+
+  <!-- Annotation arrows for reused DBs -->
+  <!-- db_region_8 column (R8) — used 3 times -->
+  <text x="592" y="400" text-anchor="middle" font-size="11" fill="#92400e" font-weight="700">⚑ 3 queries</text>
+  <line x1="592" y1="139" x2="592" y2="180" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <line x1="592" y1="178" x2="592" y2="217" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <line x1="592" y1="216" x2="592" y2="313" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+  <!-- db_marketplace column (MKT) — used 2 times -->
+  <text x="702" y="400" text-anchor="middle" font-size="11" fill="#92400e" font-weight="700">⚑ 2 queries</text>
+  <line x1="702" y1="253" x2="702" y2="351" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+  <!-- Legend -->
+  <g transform="translate(40, 435)">
+    <text x="0" y="0" font-size="12" font-weight="700" fill="#1f3a5f">How to read this:</text>
+    <text x="0" y="20" font-size="11" fill="#374151">• Each <tspan fill="#3b82f6" font-weight="700">●</tspan> = one (db, query) pair the pipeline runs. There are 21 total.</text>
+    <text x="0" y="38" font-size="11" fill="#374151">• Rows 1–2 = <tspan fill="#3b82f6" font-weight="600">parallel fan-out</tspan> (one query × 8 DBs, all 8 run concurrently within the batch).</text>
+    <text x="0" y="56" font-size="11" fill="#374151">• Rows 3–7 = <tspan fill="#a78bfa" font-weight="600">single execution</tspan> (one query against one DB).</text>
+    <text x="0" y="74" font-size="11" fill="#374151">• <tspan fill="#dc2626" font-weight="600">Highlighted columns</tspan> = same DB targeted by multiple queries (fan-in). db_region_8 hosts 3 queries; db_marketplace hosts 2.</text>
+  </g>
+</svg>

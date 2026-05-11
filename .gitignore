@@ -1,0 +1,23 @@
+# Jupyter checkpoints (autosaves may contain pre-scrub content — keep ignored)
+.ipynb_checkpoints/
+
+# Excel outputs (generated when the pipeline runs)
+*.xlsx
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Credentials & secrets
+.env
+.env.local
+vault_auth.py
+
+# Logs
+*.log
+
+# Editor / OS files
+.vscode/
+.idea/
+Thumbs.db
