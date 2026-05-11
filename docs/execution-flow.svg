@@ -1,197 +1,136 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
-  <!-- Title -->
-  <text x="550" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1f3a5f">Execution Architecture</text>
-  <text x="550" y="56" text-anchor="middle" font-size="13" fill="#6b7280">7 sequential batches · parallel within each batch · ThreadPool(processes=8)</text>
-
-  <!-- Time arrow at top -->
-  <line x1="40" y1="92" x2="1060" y2="92" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 4"/>
-  <polygon points="1060,87 1072,92 1060,97" fill="#9ca3af"/>
-  <text x="1080" y="96" font-size="11" fill="#6b7280" font-style="italic">time</text>
-
-  <!-- Batch columns -->
-  <!-- Each column: x_start = 30 + i*150, width = 140, gap = 10 -->
-
-  <!-- BATCH 1 -->
-  <g transform="translate(30, 110)">
-    <rect width="140" height="380" rx="8" fill="#f0f9ff" stroke="#3b82f6" stroke-width="1.5"/>
-    <rect width="140" height="34" rx="8" fill="#3b82f6"/>
-    <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 1</text>
-    <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#1f3a5f">PARALLEL · 8 workers</text>
-    <text x="70" y="78" text-anchor="middle" font-size="11" fill="#374151">qry_medicaid_t5</text>
-    <!-- 8 worker dots -->
-    <g transform="translate(20, 95)">
-      <circle cx="0" cy="10" r="6" fill="#3b82f6"/><text x="14" y="14" font-size="10" fill="#374151">db_region_1</text>
-      <circle cx="0" cy="30" r="6" fill="#3b82f6"/><text x="14" y="34" font-size="10" fill="#374151">db_region_2</text>
-      <circle cx="0" cy="50" r="6" fill="#3b82f6"/><text x="14" y="54" font-size="10" fill="#374151">db_region_3</text>
-      <circle cx="0" cy="70" r="6" fill="#3b82f6"/><text x="14" y="74" font-size="10" fill="#374151">db_region_4</text>
-      <circle cx="0" cy="90" r="6" fill="#3b82f6"/><text x="14" y="94" font-size="10" fill="#374151">db_region_5</text>
-      <circle cx="0" cy="110" r="6" fill="#3b82f6"/><text x="14" y="114" font-size="10" fill="#374151">db_region_6</text>
-      <circle cx="0" cy="130" r="6" fill="#3b82f6"/><text x="14" y="134" font-size="10" fill="#374151">db_region_7</text>
-      <circle cx="0" cy="150" r="6" fill="#3b82f6"/><text x="14" y="154" font-size="10" fill="#374151">db_region_8</text>
-    </g>
-    <!-- concat arrow -->
-    <line x1="70" y1="265" x2="70" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="65,285 70,295 75,285" fill="#374151"/>
-    <text x="86" y="282" font-size="9" fill="#6b7280" font-style="italic">concat</text>
-    <!-- output -->
-    <rect x="14" y="298" width="112" height="60" rx="6" fill="#10b981"/>
-    <text x="70" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">1 Excel file</text>
-    <text x="70" y="338" text-anchor="middle" font-size="9" fill="white">claims_medicaid_t5_</text>
-    <text x="70" y="350" text-anchor="middle" font-size="9" fill="white">*.xlsx</text>
-  </g>
-
-  <!-- Series arrow between Batch 1 and Batch 2 -->
-  <line x1="172" y1="295" x2="188" y2="295" stroke="#1f3a5f" stroke-width="2"/>
-  <polygon points="186,291 194,295 186,299" fill="#1f3a5f"/>
-
-  <!-- BATCH 2 -->
-  <g transform="translate(190, 110)">
-    <rect width="140" height="380" rx="8" fill="#f0f9ff" stroke="#3b82f6" stroke-width="1.5"/>
-    <rect width="140" height="34" rx="8" fill="#3b82f6"/>
-    <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 2</text>
-    <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#1f3a5f">PARALLEL · 8 workers</text>
-    <text x="70" y="78" text-anchor="middle" font-size="11" fill="#374151">qry_medicaid_t4</text>
-    <g transform="translate(20, 95)">
-      <circle cx="0" cy="10" r="6" fill="#3b82f6"/><text x="14" y="14" font-size="10" fill="#374151">db_region_1</text>
-      <circle cx="0" cy="30" r="6" fill="#3b82f6"/><text x="14" y="34" font-size="10" fill="#374151">db_region_2</text>
-      <circle cx="0" cy="50" r="6" fill="#3b82f6"/><text x="14" y="54" font-size="10" fill="#374151">db_region_3</text>
-      <circle cx="0" cy="70" r="6" fill="#3b82f6"/><text x="14" y="74" font-size="10" fill="#374151">db_region_4</text>
-      <circle cx="0" cy="90" r="6" fill="#3b82f6"/><text x="14" y="94" font-size="10" fill="#374151">db_region_5</text>
-      <circle cx="0" cy="110" r="6" fill="#3b82f6"/><text x="14" y="114" font-size="10" fill="#374151">db_region_6</text>
-      <circle cx="0" cy="130" r="6" fill="#3b82f6"/><text x="14" y="134" font-size="10" fill="#374151">db_region_7</text>
-      <circle cx="0" cy="150" r="6" fill="#3b82f6"/><text x="14" y="154" font-size="10" fill="#374151">db_region_8</text>
-    </g>
-    <line x1="70" y1="265" x2="70" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="65,285 70,295 75,285" fill="#374151"/>
-    <text x="86" y="282" font-size="9" fill="#6b7280" font-style="italic">concat</text>
-    <rect x="14" y="298" width="112" height="60" rx="6" fill="#10b981"/>
-    <text x="70" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">1 Excel file</text>
-    <text x="70" y="338" text-anchor="middle" font-size="9" fill="white">claims_medicaid_t4_</text>
-    <text x="70" y="350" text-anchor="middle" font-size="9" fill="white">*.xlsx</text>
-  </g>
-
-  <line x1="332" y1="295" x2="348" y2="295" stroke="#1f3a5f" stroke-width="2"/>
-  <polygon points="346,291 354,295 346,299" fill="#1f3a5f"/>
-
-  <!-- BATCH 3 -->
-  <g transform="translate(350, 110)">
-    <rect width="140" height="380" rx="8" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.5"/>
-    <rect width="140" height="34" rx="8" fill="#a78bfa"/>
-    <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 3</text>
-    <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">SERIAL · 1 worker</text>
-    <text x="70" y="78" text-anchor="middle" font-size="11" fill="#374151">qry_medicare_t5</text>
-    <g transform="translate(20, 95)">
-      <circle cx="0" cy="80" r="6" fill="#a78bfa"/><text x="14" y="84" font-size="10" fill="#374151">db_medicare</text>
-    </g>
-    <line x1="70" y1="265" x2="70" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="65,285 70,295 75,285" fill="#374151"/>
-    <rect x="14" y="298" width="112" height="60" rx="6" fill="#10b981"/>
-    <text x="70" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">1 Excel file</text>
-    <text x="70" y="338" text-anchor="middle" font-size="9" fill="white">claims_medicare_t5_</text>
-    <text x="70" y="350" text-anchor="middle" font-size="9" fill="white">*.xlsx</text>
-  </g>
-
-  <line x1="492" y1="295" x2="508" y2="295" stroke="#1f3a5f" stroke-width="2"/>
-  <polygon points="506,291 514,295 506,299" fill="#1f3a5f"/>
-
-  <!-- BATCH 4 -->
-  <g transform="translate(510, 110)">
-    <rect width="140" height="380" rx="8" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.5"/>
-    <rect width="140" height="34" rx="8" fill="#a78bfa"/>
-    <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 4</text>
-    <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">SERIAL · 1 worker</text>
-    <text x="70" y="78" text-anchor="middle" font-size="11" fill="#374151">qry_marketplace_t5</text>
-    <g transform="translate(20, 95)">
-      <circle cx="0" cy="80" r="6" fill="#a78bfa"/><text x="14" y="84" font-size="10" fill="#374151">db_marketplace</text>
-    </g>
-    <line x1="70" y1="265" x2="70" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="65,285 70,295 75,285" fill="#374151"/>
-    <rect x="14" y="298" width="112" height="60" rx="6" fill="#10b981"/>
-    <text x="70" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">1 Excel file</text>
-    <text x="70" y="338" text-anchor="middle" font-size="9" fill="white">claims_marketplace_t5_</text>
-    <text x="70" y="350" text-anchor="middle" font-size="9" fill="white">*.xlsx</text>
-  </g>
-
-  <line x1="652" y1="295" x2="668" y2="295" stroke="#1f3a5f" stroke-width="2"/>
-  <polygon points="666,291 674,295 666,299" fill="#1f3a5f"/>
-
-  <!-- BATCH 5 — special case -->
-  <g transform="translate(670, 110)">
-    <rect width="140" height="380" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
-    <rect width="140" height="34" rx="8" fill="#f59e0b"/>
-    <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 5 ★</text>
-    <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">SERIAL · 1 worker</text>
-    <text x="70" y="78" text-anchor="middle" font-size="11" fill="#374151">qry_commercial</text>
-    <g transform="translate(20, 95)">
-      <circle cx="0" cy="80" r="6" fill="#f59e0b"/><text x="14" y="84" font-size="10" fill="#374151">db_commercial</text>
-    </g>
-    <line x1="70" y1="265" x2="70" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="65,285 70,295 75,285" fill="#374151"/>
-    <rect x="14" y="298" width="112" height="60" rx="6" fill="#f59e0b"/>
-    <text x="70" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">3 Excel files</text>
-    <text x="70" y="338" text-anchor="middle" font-size="9" fill="white">(via pandasql split)</text>
-    <text x="70" y="350" text-anchor="middle" font-size="9" fill="white">see Diagram 3</text>
-  </g>
-
-  <line x1="812" y1="295" x2="828" y2="295" stroke="#1f3a5f" stroke-width="2"/>
-  <polygon points="826,291 834,295 826,299" fill="#1f3a5f"/>
-
-  <!-- BATCH 6 -->
-  <g transform="translate(830, 110)">
-    <rect width="140" height="380" rx="8" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.5"/>
-    <rect width="140" height="34" rx="8" fill="#a78bfa"/>
-    <text x="70" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 6</text>
-    <text x="70" y="56" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">SERIAL · 1 worker</text>
-    <text x="70" y="78" text-anchor="middle" font-size="11" fill="#374151">qry_state_prepay</text>
-    <g transform="translate(20, 95)">
-      <circle cx="0" cy="80" r="6" fill="#a78bfa"/><text x="14" y="84" font-size="10" fill="#374151">db_region_8 ⚑</text>
-    </g>
-    <line x1="70" y1="265" x2="70" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="65,285 70,295 75,285" fill="#374151"/>
-    <rect x="14" y="298" width="112" height="60" rx="6" fill="#10b981"/>
-    <text x="70" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">1 Excel file</text>
-    <text x="70" y="338" text-anchor="middle" font-size="9" fill="white">claims_state_prepay_</text>
-    <text x="70" y="350" text-anchor="middle" font-size="9" fill="white">*.xlsx</text>
-  </g>
-
-  <line x1="972" y1="295" x2="988" y2="295" stroke="#1f3a5f" stroke-width="2"/>
-  <polygon points="986,291 994,295 986,299" fill="#1f3a5f"/>
-
-  <!-- BATCH 7 -->
-  <g transform="translate(990, 110)">
-    <rect width="100" height="380" rx="8" fill="#faf5ff" stroke="#a78bfa" stroke-width="1.5"/>
-    <rect width="100" height="34" rx="8" fill="#a78bfa"/>
-    <text x="50" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="white">BATCH 7</text>
-    <text x="50" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#5b21b6">SERIAL · 1</text>
-    <text x="50" y="78" text-anchor="middle" font-size="10" fill="#374151">qry_all_mkt_pob</text>
-    <g transform="translate(12, 95)">
-      <circle cx="0" cy="80" r="6" fill="#a78bfa"/><text x="10" y="84" font-size="9" fill="#374151">db_marketplace ⚑</text>
-    </g>
-    <line x1="50" y1="265" x2="50" y2="290" stroke="#374151" stroke-width="1.5"/>
-    <polygon points="45,285 50,295 55,285" fill="#374151"/>
-    <rect x="8" y="298" width="84" height="60" rx="6" fill="#10b981"/>
-    <text x="50" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="white">1 Excel</text>
-    <text x="50" y="338" text-anchor="middle" font-size="8" fill="white">claims_marketplace</text>
-    <text x="50" y="350" text-anchor="middle" font-size="8" fill="white">_pob_*.xlsx</text>
-  </g>
-
-  <!-- Bottom legend -->
-  <g transform="translate(40, 525)">
-    <text x="0" y="0" font-size="11" font-weight="700" fill="#1f3a5f">Legend:</text>
-    <circle cx="60" cy="-4" r="5" fill="#3b82f6"/>
-    <text x="72" y="0" font-size="11" fill="#374151">parallel worker</text>
-    <circle cx="180" cy="-4" r="5" fill="#a78bfa"/>
-    <text x="192" y="0" font-size="11" fill="#374151">serial worker</text>
-    <rect x="295" y="-9" width="12" height="10" rx="2" fill="#10b981"/>
-    <text x="312" y="0" font-size="11" fill="#374151">standard Excel output</text>
-    <rect x="450" y="-9" width="12" height="10" rx="2" fill="#f59e0b"/>
-    <text x="467" y="0" font-size="11" fill="#374151">special: in-memory split</text>
-    <text x="620" y="0" font-size="11" fill="#374151">⚑ = same DB reused with a different query (fan-in)</text>
-  </g>
-  <g transform="translate(40, 555)">
-    <text x="0" y="0" font-size="11" fill="#374151">
-      <tspan font-weight="700" fill="#1f3a5f">Result:</tspan>
-      9 Excel files total (2 batched + 4 single + 3 from Commercial split) → distributed via email loop.
-    </text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 960" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+<text x="550" y="28" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">Execution Architecture</text>
+<text x="550" y="54" text-anchor="middle" font-size="15" fill="#64748b">7 sequential batches · parallel within each batch (ThreadPool, 8 workers) · series between batches</text>
+<rect x="20" y="72" width="1060" height="185" rx="10" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+<rect x="20" y="72" width="1060" height="38" rx="10" fill="#1e40af" stroke="none" stroke-width="1.5"/>
+<text x="550" y="86" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 1</text>
+<text x="550" y="100" text-anchor="middle" font-size="13" font-weight="400" fill="#bfdbfe" font-style="normal">PARALLEL · 8 workers · qry_medicaid_t5</text>
+<circle cx="86" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="86" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_1</text>
+<line x1="86" y1="166" x2="86" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="218" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="218" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_2</text>
+<line x1="218" y1="166" x2="218" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="351" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="351" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_3</text>
+<line x1="351" y1="166" x2="351" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="483" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="483" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_4</text>
+<line x1="483" y1="166" x2="483" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="616" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="616" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_5</text>
+<line x1="616" y1="166" x2="616" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="748" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="748" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_6</text>
+<line x1="748" y1="166" x2="748" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="881" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="881" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_7</text>
+<line x1="881" y1="166" x2="881" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="1013" cy="154" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="1013" y="180" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_8</text>
+<line x1="1013" y1="166" x2="1013" y2="182" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="86" y1="182" x2="1013" y2="182" stroke="#1e40af" stroke-width="2"/>
+<line x1="549" y1="182" x2="549" y2="204" stroke="#1e40af" stroke-width="2"/>
+<polygon points="543,204 549,212 555,204" fill="#1e40af"/>
+<text x="565" y="198" text-anchor="start" font-size="12" font-weight="400" fill="#475569" font-style="italic">concat</text>
+<rect x="369" y="212" width="360" height="34" rx="8" fill="#059669" stroke="none" stroke-width="1.5"/>
+<text x="549" y="233" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff" font-style="normal">claims_medicaid_t5_*.xlsx</text>
+<rect x="20" y="271" width="1060" height="185" rx="10" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+<rect x="20" y="271" width="1060" height="38" rx="10" fill="#1e40af" stroke="none" stroke-width="1.5"/>
+<text x="550" y="285" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 2</text>
+<text x="550" y="299" text-anchor="middle" font-size="13" font-weight="400" fill="#bfdbfe" font-style="normal">PARALLEL · 8 workers · qry_medicaid_t4</text>
+<circle cx="86" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="86" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_1</text>
+<line x1="86" y1="365" x2="86" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="218" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="218" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_2</text>
+<line x1="218" y1="365" x2="218" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="351" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="351" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_3</text>
+<line x1="351" y1="365" x2="351" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="483" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="483" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_4</text>
+<line x1="483" y1="365" x2="483" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="616" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="616" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_5</text>
+<line x1="616" y1="365" x2="616" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="748" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="748" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_6</text>
+<line x1="748" y1="365" x2="748" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="881" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="881" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_7</text>
+<line x1="881" y1="365" x2="881" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<circle cx="1013" cy="353" r="12" fill="#1e40af" stroke="white" stroke-width="1.5"/>
+<text x="1013" y="379" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_region_8</text>
+<line x1="1013" y1="365" x2="1013" y2="381" stroke="#1e40af" stroke-width="1.5"/>
+<line x1="86" y1="381" x2="1013" y2="381" stroke="#1e40af" stroke-width="2"/>
+<line x1="549" y1="381" x2="549" y2="403" stroke="#1e40af" stroke-width="2"/>
+<polygon points="543,403 549,411 555,403" fill="#1e40af"/>
+<text x="565" y="397" text-anchor="start" font-size="12" font-weight="400" fill="#475569" font-style="italic">concat</text>
+<rect x="369" y="411" width="360" height="34" rx="8" fill="#059669" stroke="none" stroke-width="1.5"/>
+<text x="549" y="432" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff" font-style="normal">claims_medicaid_t4_*.xlsx</text>
+<rect x="20" y="470" width="346" height="185" rx="10" fill="#f5f3ff" stroke="#5b21b6" stroke-width="2"/>
+<rect x="20" y="470" width="346" height="38" rx="10" fill="#5b21b6" stroke="none" stroke-width="1.5"/>
+<text x="193" y="484" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 3</text>
+<text x="193" y="498" text-anchor="middle" font-size="12" font-weight="400" fill="#e2e8f0" font-style="normal">SERIAL · 1 worker</text>
+<text x="193" y="524" text-anchor="middle" font-size="13" font-weight="600" fill="#1e293b" font-style="normal">qry_medicare_t5</text>
+<circle cx="193" cy="576" r="12" fill="#5b21b6" stroke="white" stroke-width="1.5"/>
+<text x="193" y="602" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_medicare</text>
+<line x1="193" y1="588" x2="193" y2="612" stroke="#5b21b6" stroke-width="2"/>
+<polygon points="187,612 193,620 199,612" fill="#5b21b6"/>
+<rect x="35" y="620" width="316" height="34" rx="8" fill="#059669" stroke="none" stroke-width="1.5"/>
+<text x="193" y="641" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-style="normal">claims_medicare_t5_*.xlsx</text>
+<rect x="376" y="470" width="346" height="185" rx="10" fill="#f5f3ff" stroke="#5b21b6" stroke-width="2"/>
+<rect x="376" y="470" width="346" height="38" rx="10" fill="#5b21b6" stroke="none" stroke-width="1.5"/>
+<text x="549" y="484" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 4</text>
+<text x="549" y="498" text-anchor="middle" font-size="12" font-weight="400" fill="#e2e8f0" font-style="normal">SERIAL · 1 worker</text>
+<text x="549" y="524" text-anchor="middle" font-size="13" font-weight="600" fill="#1e293b" font-style="normal">qry_marketplace_t5</text>
+<circle cx="549" cy="576" r="12" fill="#5b21b6" stroke="white" stroke-width="1.5"/>
+<text x="549" y="602" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_marketplace ⚑</text>
+<line x1="549" y1="588" x2="549" y2="612" stroke="#5b21b6" stroke-width="2"/>
+<polygon points="543,612 549,620 555,612" fill="#5b21b6"/>
+<rect x="391" y="620" width="316" height="34" rx="8" fill="#059669" stroke="none" stroke-width="1.5"/>
+<text x="549" y="641" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-style="normal">claims_marketplace_t5_*.xlsx</text>
+<rect x="732" y="470" width="346" height="185" rx="10" fill="#fffbeb" stroke="#92400e" stroke-width="2"/>
+<rect x="732" y="470" width="346" height="38" rx="10" fill="#92400e" stroke="none" stroke-width="1.5"/>
+<text x="905" y="484" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 5 ★</text>
+<text x="905" y="498" text-anchor="middle" font-size="12" font-weight="400" fill="#fef3c7" font-style="normal">SERIAL · 1 worker</text>
+<text x="905" y="524" text-anchor="middle" font-size="13" font-weight="600" fill="#1e293b" font-style="normal">qry_commercial</text>
+<circle cx="905" cy="576" r="12" fill="#92400e" stroke="white" stroke-width="1.5"/>
+<text x="905" y="602" text-anchor="middle" font-size="12" font-weight="400" fill="#1e293b" font-style="normal">db_commercial</text>
+<line x1="905" y1="588" x2="905" y2="612" stroke="#92400e" stroke-width="2"/>
+<polygon points="899,612 905,620 911,612" fill="#92400e"/>
+<rect x="747" y="620" width="316" height="34" rx="8" fill="#92400e" stroke="none" stroke-width="1.5"/>
+<text x="905" y="641" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-style="normal">3 files via pandasql →</text>
+<rect x="20" y="669" width="525" height="185" rx="10" fill="#f5f3ff" stroke="#5b21b6" stroke-width="2"/>
+<rect x="20" y="669" width="525" height="38" rx="10" fill="#5b21b6" stroke="none" stroke-width="1.5"/>
+<text x="282" y="683" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 6</text>
+<text x="282" y="697" text-anchor="middle" font-size="12" font-weight="400" fill="#e2e8f0" font-style="normal">SERIAL · 1 worker</text>
+<text x="282" y="723" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" font-style="normal">qry_state_prepay</text>
+<circle cx="282" cy="775" r="12" fill="#5b21b6" stroke="white" stroke-width="1.5"/>
+<text x="282" y="801" text-anchor="middle" font-size="13" font-weight="400" fill="#1e293b" font-style="normal">db_region_8  ⚑</text>
+<line x1="282" y1="787" x2="282" y2="811" stroke="#5b21b6" stroke-width="2"/>
+<polygon points="276,811 282,819 288,811" fill="#5b21b6"/>
+<rect x="50" y="819" width="465" height="34" rx="8" fill="#059669" stroke="none" stroke-width="1.5"/>
+<text x="282" y="840" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff" font-style="normal">claims_state_prepay_*.xlsx</text>
+<rect x="555" y="669" width="525" height="185" rx="10" fill="#f5f3ff" stroke="#5b21b6" stroke-width="2"/>
+<rect x="555" y="669" width="525" height="38" rx="10" fill="#5b21b6" stroke="none" stroke-width="1.5"/>
+<text x="817" y="683" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff" font-style="normal">BATCH 7</text>
+<text x="817" y="697" text-anchor="middle" font-size="12" font-weight="400" fill="#e2e8f0" font-style="normal">SERIAL · 1 worker</text>
+<text x="817" y="723" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" font-style="normal">qry_all_marketplace_pob</text>
+<circle cx="817" cy="775" r="12" fill="#5b21b6" stroke="white" stroke-width="1.5"/>
+<text x="817" y="801" text-anchor="middle" font-size="13" font-weight="400" fill="#1e293b" font-style="normal">db_marketplace  ⚑</text>
+<line x1="817" y1="787" x2="817" y2="811" stroke="#5b21b6" stroke-width="2"/>
+<polygon points="811,811 817,819 823,811" fill="#5b21b6"/>
+<rect x="585" y="819" width="465" height="34" rx="8" fill="#059669" stroke="none" stroke-width="1.5"/>
+<text x="817" y="840" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff" font-style="normal">claims_marketplace_pob_*.xlsx</text>
+<text x="20" y="886" text-anchor="start" font-size="15" font-weight="700" fill="#1e293b" font-style="normal">Legend:</text>
+<circle cx="90" cy="882" r="7" fill="#1e40af"/>
+<text x="104" y="886" text-anchor="start" font-size="14" font-weight="400" fill="#1e293b" font-style="normal">parallel worker (all 8 run concurrently)</text>
+<circle cx="460" cy="882" r="7" fill="#5b21b6"/>
+<text x="474" y="886" text-anchor="start" font-size="14" font-weight="400" fill="#1e293b" font-style="normal">serial worker (1 at a time)</text>
+<circle cx="700" cy="882" r="7" fill="#92400e"/>
+<text x="714" y="886" text-anchor="start" font-size="14" font-weight="400" fill="#1e293b" font-style="normal">special: pandasql split (see Diagram 3)</text>
+<text x="20" y="914" text-anchor="start" font-size="14" font-weight="400" fill="#475569" font-style="normal">⚑ same database targeted by multiple different queries (fan-in)      ★ batch result is split into 3 files, not written directly to Excel</text>
+<text x="20" y="938" text-anchor="start" font-size="14" font-weight="400" fill="#1e293b" font-style="normal">Result: 9 Excel files total (2 batched + 4 single + 3 from Batch 5 pandasql split) → emailed to downstream intake system.</text>
 </svg>

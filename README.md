@@ -39,9 +39,9 @@ The pipeline solves this with three coordinated structures: a query list, a data
 
 A `ThreadPool` of 8 workers is created once. The main loop walks 7 batches in order. For each batch, `pool.map()` distributes the (database, query) pairs in that batch across the workers — so within batches 1 and 2, all 8 regional databases are queried concurrently; within batches 3–7, the single (db, query) pair runs on one worker.
 
-Why series between batches? Two reasons embedded in the design:
-1. **Result aggregation is per-batch.** Each batch concatenates its dataframes (`pd.concat(global_ex_data)`) into a single output. The next batch can't start until the previous one's results have been written and the worker-local accumulator is reset.
-2. **Resource pressure.** Running all 21 queries fully parallel would hit the Oracle host with 21 concurrent connections; the batched design caps concurrency at 8.
+Why series between batches? Two reasons:
+1. **Database concurrency constraint.** The production database system enforces a one-concurrent-query-per-user-per-database limit — the same user account cannot run two queries against the same database simultaneously. Batches 1 and 2 both target the same 8 regional databases; running them at the same time would violate this constraint. Within a single batch, every query targets a *different* database, so parallel execution is safe. The batch boundary is the design's way of respecting the per-user, per-database concurrency rule.
+2. **Result aggregation is per-batch.** Each batch concatenates its dataframes (`pd.concat(global_ex_data)`) into a single output file. The accumulator (`global_ex_data`) is reset at the start of each batch iteration, so batches must complete in sequence.
 
 ---
 
@@ -153,6 +153,16 @@ write_to_excel(comm_prepay, 'claims_commercial_prepay_' + now + '.xlsx', ...)
 
 ---
 
+## Email distribution and output formatting
+
+After all Excel files are produced, the pipeline loops through them and sends each as an email attachment to a downstream data intake system that automatically ingests the files on receipt.
+
+This is why output formatting is as precise as it is. Both the email and the spreadsheets must conform to the intake system's ingestion requirements — specific column headers (hence the per-batch `header_nlist` rather than default dataframe column names), specific sheet names, specific numeric formatting (`float_format="%.2f"`), and a specific email title and message body. A file that is structurally correct but uses the wrong header names, or an email with the wrong subject line, will not be picked up by the automated system.
+
+The `header_nlist` parallel structure — one header list per batch, indexed to match `writer_list` — is a direct consequence of this constraint. Different query types return different schemas, and each schema has to map to the exact column names the intake system expects.
+
+---
+
 ## Constraints and creative workarounds
 
 | Constraint | Workaround |
@@ -164,6 +174,7 @@ write_to_excel(comm_prepay, 'claims_commercial_prepay_' + now + '.xlsx', ...)
 | One DB's results need to be split three ways without re-querying | Single Oracle round-trip + `PandaSQL` instance reused across three in-memory SQL queries |
 | One DB outage shouldn't kill the whole run | `try/except` around `run_query` catches `OperationalError`, `InternalError`, `ProgrammingError`, `NotSupportedError`, `DatabaseError`, and bare `Exception` — each path logs and `pass`es so the loop continues |
 | 20+ Oracle connections opened over a run could exhaust the pool | `engine.dispose()` called after each query inside `get_readsql()` |
+| Output files and emails must meet strict intake system formatting requirements | Per-batch `header_nlist` overrides default dataframe column names; `sheet_name`, `float_format`, email title, and message body are all hardcoded to match intake system expectations |
 
 ---
 
