@@ -226,5 +226,49 @@ The notebook is self-documenting — each major step has a markdown cell above i
 
 - Python 3.10+
 - `pandas`, `sqlalchemy`, `oracledb`, `pandasql`, `openpyxl`
-- `multiprocessing.pool.ThreadPool` for I/O-bound concurrency (each worker is mostly waiting on Oracle, not doing CPU work, so threads beat processes here)
+- `multiprocessing.pool.ThreadPool` for I/O-bound concurrency (see design rationale below)
 - Jupyter notebook as the orchestration runtime; could be lifted to a `.py` script with minimal refactoring
+
+---
+
+## Concurrency design rationale: why ThreadPool, and why it helps here
+
+This is worth spelling out because the choice between threading and multiprocessing is a common point of confusion in Python, and the answer depends on what the workers are actually doing.
+
+### The GIL and why it matters
+
+Python's Global Interpreter Lock (GIL) prevents more than one thread from executing Python bytecode at the same time. This means that for CPU-bound work — parsing, computing, transforming data — Python threads do not run in true parallel. A `ThreadPool` on a CPU-bound task would actually be *slower* than running serially, because of the overhead of context-switching between threads that can't execute simultaneously anyway. For CPU-bound parallelism you need `ProcessPool`, which spawns separate Python processes each with their own GIL.
+
+### Why this workload is different
+
+Each call to `get_readsql()` does the following:
+
+1. Opens a SQLAlchemy / `oracledb` connection
+2. Sends the SQL string to the Oracle server over the network
+3. **Waits** — potentially for minutes — while Oracle executes the query remotely
+4. Reads the result rows back over the network into a pandas DataFrame
+
+Steps 3 and 4 are network I/O. During a blocking I/O operation, the GIL is released — Python explicitly yields it while waiting for the OS to return data from the network socket. This means other threads are free to execute while any given thread is waiting on Oracle. In practice, all 8 threads send their queries nearly simultaneously, then each waits independently for its own database to respond. Wall-clock time for a batch of 8 = roughly the time of the slowest single query, not the sum of all 8.
+
+The actual run output confirms this: queries completed out of order (1.32 min, 1.37 min, 1.38 min, 3.65 min, 6.52 min) — the signature of genuine parallel I/O. They all started at the same time and finished whenever Oracle was done with each one.
+
+### Why not ProcessPool
+
+`ProcessPool` spawns separate OS processes, each with its own Python interpreter and memory space. This genuinely sidesteps the GIL for CPU-bound work. But it introduces two costs that make it the wrong choice here:
+
+1. **Inter-process data transfer.** Each subprocess would need to serialize its DataFrame (via pickle) and send it back to the main process through a pipe. For large query results this is expensive and partially cancels the parallelism benefit.
+2. **Process spawn overhead.** Spawning 8 processes has meaningful startup cost. For a workload where each task takes 1–6 minutes of waiting, this overhead is small — but `ThreadPool` carries none of it, since threads share the same process memory and start instantly.
+
+Since the workers spend nearly all their time waiting on network I/O (not executing Python), `ThreadPool` gives the same concurrency benefit as `ProcessPool` would, with none of the serialization or spawn cost. The DataFrames accumulate directly in `global_ex_data` (shared memory) without any pickling or IPC.
+
+### Summary
+
+| | ThreadPool | ProcessPool |
+|---|---|---|
+| GIL bypassed? | No — but GIL releases during I/O | Yes — separate processes |
+| True parallel for CPU work? | No | Yes |
+| True parallel for I/O wait? | **Yes** — GIL released while waiting | Yes |
+| DataFrame result transfer | Shared memory, zero cost | Pickle + IPC pipe, non-trivial |
+| Right choice here? | **Yes** | No — adds cost, no benefit |
+
+The decision rule: if your workers spend most of their time waiting for network or disk I/O, use `ThreadPool`. If they spend most of their time executing Python (parsing, computing, transforming), use `ProcessPool`.
