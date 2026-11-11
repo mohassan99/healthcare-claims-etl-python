@@ -40,7 +40,7 @@ The pipeline solves this with three coordinated structures: a query list, a data
 A `ThreadPool` of 8 workers is created once. The main loop walks 7 batches in order. For each batch, `pool.map()` distributes the (database, query) pairs in that batch across the workers — so within batches 1 and 2, all 8 regional databases are queried concurrently; within batches 3–7, the single (db, query) pair runs on one worker.
 
 Why series between batches? Two reasons:
-1. **Database concurrency constraint.** The production database system enforces a one-concurrent-query-per-user-per-database limit — the same user account cannot run two queries against the same database simultaneously. Batches 1 and 2 both target the same 8 regional databases; running them at the same time would violate this constraint. Within a single batch, every query targets a *different* database, so parallel execution is safe. The batch boundary is the design's way of respecting the per-user, per-database concurrency rule.
+1. **Database concurrency constraint.** The production database system enforces a one-concurrent-query-per-user-per-database limit — the same user account cannot run two queries against the same database simultaneously. The code is built to respect this: within any one batch, every (database, query) pair targets a *different* database, so a batch never asks one database to run two queries at once. A database that is used by more than one query (`db_region_8`, `db_marketplace`, and the eight regional databases across batches 1 and 2) only reappears in a *different* batch, and batches run one after another. The batch boundary is the design's way of respecting the per-user, per-database concurrency rule.
 2. **Result aggregation is per-batch.** Each batch concatenates its dataframes (`pd.concat(global_ex_data)`) into a single output file. The accumulator (`global_ex_data`) is reset at the start of each batch iteration, so batches must complete in sequence.
 
 ---
@@ -67,12 +67,12 @@ Batch 5 is structurally different from every other batch. The Commercial query r
 The naive approach would issue three separate Oracle queries — three network round-trips, three table scans, three sets of database load. Instead, the pipeline:
 
 1. Runs the Oracle query **once** to populate one dataframe in memory.
-2. Cleans the result (date column normalization, amount-column dtype coercion).
+2. Cleans the result (the `Processed Date` column is normalized in the main loop).
 3. Hands the dataframe to **pandasql**, which exposes a SQLite-like SQL engine over pandas dataframes.
 4. Runs three lightweight in-memory SQL queries (`qry_hd`, `qry_pob`, `qry_prepay`) against the same dataframe.
 5. Writes each result to its own Excel file.
 
-This is why the main loop has a conditional check `if zip_dest_query[i][0][0] == 'db_commercial'` — when it detects the Commercial batch, it skips the standard Excel write and hands off to the downstream pandasql cells instead.
+This is why the main loop has a conditional check `if zip_dest_query[i][0][0] == 'db_commercial'` — when it detects the Commercial batch, it skips the standard Excel write and hands off to the downstream pandasql cells instead. (A commented-out manual re-run cell in the notebook also shows amount-column dtype coercion for this branch.)
 
 ---
 
@@ -200,7 +200,9 @@ except Exception as e:           # absolute backstop
     log_and_continue(...)
 ```
 
-Each handler logs the database name and the error message, then `pass`es. The threadpool moves on; the batch's accumulator simply has one fewer dataframe than it might have had. The downstream `pd.concat` works with whatever did succeed, and the Excel file is written with partial data plus a log entry showing which DB(s) failed.
+Each handler logs the database name and the error message, then `pass`es. (`log_and_continue(...)` here stands for the print and logging calls in the notebook.) The threadpool moves on; the batch's accumulator simply has one fewer dataframe than it might have had. The downstream `pd.concat` works with whatever did succeed, and the Excel file is written with partial data plus a log entry showing which DB(s) failed.
+
+> Note: the notebook's import cell imports only `DatabaseError` from `oracledb`. The other four exception classes must also be imported (for example from `oracledb`) for those handlers to be evaluated when an error occurs.
 
 ---
 
@@ -250,7 +252,7 @@ Each call to `get_readsql()` does the following:
 
 Steps 3 and 4 are network I/O. During a blocking I/O operation, the GIL is released — Python explicitly yields it while waiting for the OS to return data from the network socket. This means other threads are free to execute while any given thread is waiting on Oracle. In practice, all 8 threads send their queries nearly simultaneously, then each waits independently for its own database to respond. Wall-clock time for a batch of 8 = roughly the time of the slowest single query, not the sum of all 8.
 
-The actual run output confirms this: queries completed out of order (1.32 min, 1.37 min, 1.38 min, 3.65 min, 6.52 min) — the signature of genuine parallel I/O. They all started at the same time and finished whenever Oracle was done with each one.
+In one production run, queries completed out of order (1.32 min, 1.37 min, 1.38 min, 3.65 min, 6.52 min) — the signature of genuine parallel I/O. They all started at the same time and finished whenever Oracle was done with each one. (Notebook cell outputs are not saved in this repository, so these timings are not reproduced here.)
 
 ### Why not ProcessPool
 
